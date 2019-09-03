@@ -14,7 +14,16 @@ const app = express();
 app.use('/graphql', graphqlHTTP({
     schema: graphqlschema,
     rootValue: graphqlresolver,
-    graphiql: true
+    graphiql: true,
+    formatError(err ) {
+        if( err.originalError) {
+            return err;
+        }
+        const data = err.originalError.data;
+        const message = err.message || 'An error occured.';
+        const code = err.originalError.code || 500;
+        return {message: message, status: code, data: data };
+    }
 
 }));
 

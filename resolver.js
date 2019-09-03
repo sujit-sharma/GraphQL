@@ -12,10 +12,12 @@ module.exports = {
     }
     if(validator.isEmpty(userInput.password) ){
         errors.push({message: 'Password must be minimum 5 character'});
-        console.log('passwd');
+        
     };
     if (errors.length > 0) {
         const error = new Error('Invalid Input please input valid data');
+        error.data = errors;
+        error.code = 422;
         throw error;
     }
     const existingUser = await User.findOne({ email: userInput.email });
